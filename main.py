@@ -8,18 +8,6 @@ from stqdm import stqdm
 from solve import Solve
 from poly import Builder
 
-def print_stats(method_name, func_runtimes):
-    if method_name not in func_runtimes:
-        print("{!r} wasn't profiled, nothing to display.".format(method_name))
-    else:
-        runtimes = func_runtimes[method_name]
-        total_runtime = sum(runtimes)
-        average = total_runtime / len(runtimes)
-        print('function: {!r}'.format(method_name))
-        print(f'\trun times: {len(runtimes)}')
-        # print('  total run time: {}'.format(total_runtime))
-        print(f'\taverage run time: {average:.7f}')
-
 def getError(params):
     params_new = params[-1].copy()
     params_new['degrees'] = [*(params[:-1])]
@@ -79,6 +67,7 @@ def getSolution(params, pbar_container, max_deg=15):
     solution = PolynomialBuilder(solver)
     
     return solver, solution, final_params['degrees']
+
 st.set_page_config(page_title='СА ЛР2', 
                    page_icon='📈',
                    layout='wide',
