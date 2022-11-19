@@ -6,7 +6,6 @@ from stqdm import stqdm
 
 #Other imports, classes will be used
 from solve import Solve
-from poly import Builder
 
 #Function to get errors
 def get_err(params):
@@ -15,7 +14,8 @@ def get_err(params):
     params_new['degrees'] = [*(params[:-1])]
     raise Exception("FF: "+str(params_new['degrees']))
     solver = Solve(params_new)
-
+    solver.run()
+    
     normed_error = min(solver.norm_error)
     return (params_new['degrees'], normed_error, 0 )
 
@@ -64,7 +64,4 @@ def get_solution(params, pbar_container, max_deg=15):
     #Run solver
     solver.run()
     
-    #Build solution
-#     solution = Builder(solver)
-    
-    return solver, 0, final_params['degrees']
+    return solver, final_params['degrees']

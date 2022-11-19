@@ -5,6 +5,7 @@ import numpy as np
 
 #Other packages
 from tool import *
+from poly import Build
 
 #Setting tab icons and name
 st.set_page_config(page_title='Solver - 2', 
@@ -70,8 +71,9 @@ if main.button('Run', key='run'):
         
         #Processing of data using packages created previously
         with st.spinner('...'):
-            solver, solution, degrees = get_solution(params, pbar_container=col3, max_deg=20) 
-        
+            solver, degrees = get_solution(params, pbar_container=main, max_deg=20) 
+        st.write("-")
+        solution = Build(solver) 
         st.write("-")
 #         if degrees != params['degrees']:
 #             col3.write(f'**Підібрані степені поліномів:**  \nX1 — {degrees[0]}  \nX2 — {degrees[1]}  \nX3 — {degrees[2]}')
