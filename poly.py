@@ -67,13 +67,14 @@ class Builder(object):
     
     #Standartize coeficients for polynom :: private
     def __standardtize__(self, c):
+        std_coeffs = np.zeros(c.shape)
         for index in range(c.shape[0]):
             cp = self.basis[index].coef.copy()
-            cp.resize(coeffs.shape)
-            if type(coeffs) is np.matrix:
-                std_coeffs += coeffs[index].getA1() * cp[0]
+            cp.resize(c.shape)
+            if type(c) is np.matrix:
+                std_coeffs += c[index].getA1() * cp[0]
             else:
-                std_coeffs += coeffs[index] * cp
+                std_coeffs += c[index] * cp
         return std_coeffs.squeeze()
     
     #Find lamdas (lowest level aggregation) for each and every X_i to summarize functions further:: private
@@ -84,7 +85,7 @@ class Builder(object):
             shift = 0
             for j in range(3): 
                 current_2 = list()
-                for k in range(self._solution.deg[j]):
+                for k in range(self._solution.dim[j]):
                     current_3 = self._solution.L[shift:shift + self._solution.degree[j], i].ravel()
                     shift += self._solution.degree[j]
                     current_2.append(current_3)
@@ -106,7 +107,7 @@ class Builder(object):
             for k in range(len(self.lvl1[i][j])):
                 shift = sum(self._solution.dim[:j]) + k
                 for n in range(len(self.lvl1[i][j][k])):
-                    strings.append(r'{0:.6f}\cdot P_{{{deg}}}(x_{{{1}{2}}})'.format(
+                    texts.append(r'{0:.6f}\cdot P_{{{deg}}}(x_{{{1}{2}}})'.format(
                         self.a[i][shift] * self.lvl1[i][j][k][n],
                         j+1, k+1, deg=n
                     ))
@@ -116,7 +117,7 @@ class Builder(object):
                 for k in range(len(self.lvl1[i][j])):
                     shift = sum(self._solution.dim[:j]) + k
                     for n in range(len(self.lvl1[i][j][k])):
-                        strings.append(r'{0:.6f}\cdot P_{{{deg}}}(x_{{{1}{2}}})'.format(
+                        texts.append(r'{0:.6f}\cdot P_{{{deg}}}(x_{{{1}{2}}})'.format(
                             self.c[i][j] * self.a[i][shift] * self.lvl1[i][j][k][n],
                             j + 1, k + 1, deg=n
                         ))
@@ -146,7 +147,7 @@ class Builder(object):
                 texts.append(str(_Polynom(
                     current_poly, 
                     symbol='(x_{0}{1})'.format(j+1, k+1),
-                    subscr='{0}{1}'.format(j+1, k+1))))
+                    subscribe='{0}{1}'.format(j+1, k+1))))
                 
         res = ' + '.join(texts).replace('+ -', '- ')
         return res
@@ -163,7 +164,7 @@ class Builder(object):
                 texts.append(str(_Polynom(
                     current_polynom, 
                     symbol="(x_"+str(j+1)+str(k+1)+")".format(j+1, k+1),
-                    subscr='{0}{1}'.format(j+1, k+1))))
+                    subscribe='{0}{1}'.format(j+1, k+1))))
         res = ' + '.join(texts).replace('+ -', '- ')
         return res
     
@@ -201,8 +202,9 @@ class Builder(object):
         
         return '\n'.join(
             [r'$\Phi_{i1}(x_1)$, $\Phi_{i2}(x_2)$, $\Phi_{i3}(x_3)$:' + '\n'] + f_texts_l +
-            [r'$\Phi_i$' + f'from polunom {self._solution.polynom_type}:' + '\n'] + f_texts + 
-            [r'$\Phi_i$ not normalized:' + '\n'] + f_texts_td
-            [r'$\Phi_i$ normalized:' + '\n'] + f_texts_t )
+            [r'$\Phi_i$' + f'from polinom {self._solution.polynomial_type}:' + '\n'] + f_texts + 
+            [r'$\Phi_i$ not normalized:' + '\n'] + f_texts_td+
+            [r'$\Phi_i$ normalized:' + '\n'] + f_texts_t
+        )
 #             [r'Проміжні функції $\Phi$:' + '\n'] + phi_strings +
 #             [r'Проміжні функції $\Psi$:' + '\n'] + psi_strings)
