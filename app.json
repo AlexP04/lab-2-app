@@ -2,18 +2,11 @@
   "name": "Practice work for System Ananlysis 2",
   "description": "System analysis project deployed on web",
   "repository": "https://github.com/AlexP04/lab-2-app",
-  "keywords": ["python"],
-  "env": {
-    "SECRET_KEY": {
-      "description": "The secret key for application.",
-      "generator": "secret"
-    }
-  },
   "environments": {
     "test": {
       "scripts": {
         "test-setup": "python main.py collectstatic --noinput",
-        "test": "python main.py test"
+        "test": "python main.py"
       }
     }
   }
