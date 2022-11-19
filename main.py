@@ -73,6 +73,7 @@ if main.button('Run', key='run'):
         with st.spinner('...'):
             solver, degrees = get_solution(params, pbar_container=main, max_deg=20) 
         st.write("-")
+        st.write(solver.norm_error)
         solution = Build(solver) 
         st.write("-")
 #         if degrees != params['degrees']:
