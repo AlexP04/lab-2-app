@@ -16,7 +16,7 @@ def get_err(params):
     solver = Solve(params_new)
 #     func_runtimes = solver.prepare()
     normed_error = min(solver.norm_error)
-    return (params_new['degrees'], normed_error)
+    return (params_new['degrees'], normed_error, 0 )
 
 #Function to get solution
 def get_solution(params, pbar_container, max_deg=15):
