@@ -45,7 +45,7 @@ degree_1 = params.number_input('Degree for X1', value=13, step=1, key='degree_1'
 degree_2 = params.number_input('Degree for X2', value=11, step=1, key='degree_2')
 degree_3 = params.number_input('Degree for X3', value=7, step=1, key='degree_3')
 use_type = params.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
-init_weight = params.radio('Weights initialization: ', ['Mean', 'Normalized'])
+init_weight = params.radio('Weights initialization: ', ['Normalized', "diff"])
 lambdas = params.checkbox('Enable search of lambdas from equations: ')
 #norme = addon.radio('Plot normalized gra: ', ['Mean', 'Normalized'])addon.checkbox('Графіки для нормованих значень')
 
@@ -64,7 +64,7 @@ if main.button('Run', key='run'):
             'output_file': output_name + '.csv',
             'degrees': [degree_1, degree_2, degree_3],
             'weights': init_weight,
-            'poly_type': use_type,
+            'polynomial_type': use_type,
             'lambda': lambdas
         }
         st.write("-")
