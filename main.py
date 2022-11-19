@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from tools import *
+import itertools
+from concurrent import futures
+from tool import getError, getSolution
 
 st.set_page_config(page_title='СА ЛР2', 
                    page_icon='📈',
@@ -21,8 +23,6 @@ st.markdown("""
 st.title('Select parameters and run: ')
 params, main, addon = st.columns(3)
 main.header('General input/output info:')
-# col_sep = col1.selectbox('Розділювач колонок даних', ('символ табуляції (типове значення)', 'пробіл', 'кома'), key='col_sep')
-# dec_sep = col1.selectbox('Розділювач дробової частини', ('крапка (типове значення)', 'кома'), key='dec_sep')
 IN = main.file_uploader('Input file name', type=['csv', 'txt'], key='input_file')
 output_name = main.text_input('Output file name', value='output', key='output_file')
 
@@ -36,13 +36,12 @@ degree_2 = params.number_input('Degree for X2', value=11, step=1, key='degree_2'
 degree_3 = params.number_input('Degree for X3', value=7, step=1, key='degree_3')
 use_type = params.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
 
-
 addon.header('Additional input parameters:')
 init_weight = addon.radio('Weights initialization: ', ['Mean', 'Normalized'])
 lambdas = addon.checkbox('Fond lambdas from equations: ')
 # norme = addon.radio('Plot normalized gra: ', ['Mean', 'Normalized'])addon.checkbox('Графіки для нормованих значень')
 
-if col3.button('RUN', key='run'):
+if addon.button('RUN', key='run'):
     try:
         input_file = IN.getvalue().decode()
         input_file = input_file_text.replace(',', '.').replace(' ', '\t')
@@ -100,17 +99,12 @@ if col3.button('RUN', key='run'):
         st.subheader(matrices[0][0])
         st.dataframe(matrices[0][1])
 
-        st.write(solution.get_results())
+        st.write(solution.process_final())
 
         matr_cols = st.columns(3)
         for ind, info in enumerate(matrices[2:5]):
             matr_cols[ind].subheader(info[0])
             matr_cols[ind].dataframe(info[1])
-
-        with open(params['output_file'], 'rb') as fout:
-            col3.download_button(
-                label='Download',
-                data=fout,
-                file_name=params['output_file']
-#                 mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            )
+    except:
+        st.write("Something went wrong, check inputs")
+            
