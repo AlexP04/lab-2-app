@@ -57,7 +57,6 @@ if main.button('Run', key='run'):
         #Parsing file recieved
         input_file_text = str(input_name.getvalue().decode())
         input_file = input_file_text.replace(",",".").replace(';', '\t')
-        st.write(input_file)
         
         #Storing parameters in convinient way
         params = {
@@ -73,7 +72,7 @@ if main.button('Run', key='run'):
         #Processing of data using packages created previously
         with st.spinner('...'):
             solver =  Solve(params)
-            solution = Builder(solver)
+            #solution = Builder(solver)
             degrees = params['degrees']
         
         st.write("-")
