@@ -1,17 +1,17 @@
+#Python imports
 import streamlit as st
 import pandas as pd
 import numpy as np
-import itertools
-from concurrent import futures
-from tool import getError, getSolution
 
-st.set_page_config(page_title='СА ЛР2', 
-                   page_icon='📈',
-                   layout='wide',
-                   menu_items={
-                       'About': 'Лабораторна робота №2 з системного аналізу'
-                   })
+#Other packages
+from tools import *
 
+#Setting tab icons and name
+st.set_page_config(page_title='Solver - 2', 
+                   page_icon='T',
+                   layout='wide')
+
+#seting color theme 
 st.markdown("""
     <style>
     .stProgress .st-ey {
@@ -20,13 +20,23 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-st.title('Select parameters and run: ')
-params, main, addon = st.columns(3)
-main.header('General input/output info:')
-IN = main.file_uploader('Input file name', type=['csv', 'txt'], key='input_file')
+#Setting general title 
+st.title('Input')
+
+#Dividing page into two parts (main and parameters input) 
+main, params = st.columns(2)
+
+#Setting main input header
+main.header('Files')
+
+#Declared variables for input/output files will be used
+input_name = main.file_uploader('Input file name', type=['csv', 'txt'], key='input_file')
 output_name = main.text_input('Output file name', value='output', key='output_file')
 
-params.header('Mandatory input parameters:')
+#Setting header for parameters input 
+params.header('Input parameters')
+
+#Declaring variables for dimensionality of data, degrees of polynoms and their types and other options
 dim = params.number_input('Dimension of Y', value=4, step=1, key='dim')
 dim_1 = params.number_input('Dimension of X1', value=2, step=1, key='dim_1')
 dim_2 = params.number_input('Dimension of X2', value=2, step=1, key='dim_2')
@@ -35,17 +45,19 @@ degree_1 = params.number_input('Degree for X1', value=13, step=1, key='degree_1'
 degree_2 = params.number_input('Degree for X2', value=11, step=1, key='degree_2')
 degree_3 = params.number_input('Degree for X3', value=7, step=1, key='degree_3')
 use_type = params.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
+init_weight = params.radio('Weights initialization: ', ['Mean', 'Normalized'])
+lambdas = params.checkbox('Enable search of lambdas from equations: ')
+#norme = addon.radio('Plot normalized gra: ', ['Mean', 'Normalized'])addon.checkbox('Графіки для нормованих значень')
 
-addon.header('Additional input parameters:')
-init_weight = addon.radio('Weights initialization: ', ['Mean', 'Normalized'])
-lambdas = addon.checkbox('Fond lambdas from equations: ')
-# norme = addon.radio('Plot normalized gra: ', ['Mean', 'Normalized'])addon.checkbox('Графіки для нормованих значень')
-
-if addon.button('RUN', key='run'):
+#Defining functionality of run button
+if main.button('Run', key='run'):
     try:
-        input_file = IN.getvalue().decode()
+        #try-block
+        #Parsing file recieved
+        input_file = input_name.getvalue().decode()
         input_file = input_file_text.replace(',', '.').replace(' ', '\t')
         
+        #Storing parameters in convinient way
         params = {
             'dimensions': [dim_1, dim_2, dim_3, dim],
             'input_file': input_file_text,
@@ -55,12 +67,17 @@ if addon.button('RUN', key='run'):
             'poly_type': use_type,
             'lambda': lambdas
         }
+        st.write("-")
+        
+        #Processing of data using packages created previously
         with st.spinner('...'):
-            solver, solution, degrees = getSolution(params, pbar_container=addon, max_deg=15)
-        if degrees != params['degrees']:
-            col3.write(f'**Підібрані степені поліномів:**  \nX1 — {degrees[0]}  \nX2 — {degrees[1]}  \nX3 — {degrees[2]}')
-
+            solver, solution, degrees = get_solution(params, pbar_container=main, max_deg=15)
+#         if degrees != params['degrees']:
+#             col3.write(f'**Підібрані степені поліномів:**  \nX1 — {degrees[0]}  \nX2 — {degrees[1]}  \nX3 — {degrees[2]}')
+        
+        #Showing and plotting errors
         error_cols = st.columns(2)
+    
         for ind, info in enumerate(solver.show_streamlit()[-2:]):
             error_cols[ind].subheader(info[0])
             error_cols[ind].dataframe(info[1])
@@ -69,28 +86,36 @@ if addon.button('RUN', key='run'):
 #             Y_values = solution._solution.Y
 #             F_values = solution._solution.F
 #         else:
+        
+        #Saving results in variables
         Y_values = solution._solution.Y_
         F_values = solution._solution.F_
-
+        st.write("--")
         cols = Y_values.shape[1]
         
-        st.subheader('Result: ')
+        #Results section
+        st.subheader('Results')
+        
+        #Defining layout of plots
         plot_cols = st.columns(cols)
-
+        
+        #Plotting residuals, components for each dimension of Y
         for n in range(plot_n_cols):
             df = pd.DataFrame(
                 np.array([Y_values[:, n], F_values[:, n]]).T,
                 columns=[f'Y{n+1}', f'F{n+1}']
             )
-            plot_cols[n].write(f'Component {n+1}')
+            plot_cols[n].write(f'Component №{n+1}')
             plot_cols[n].line_chart(df)
-            plot_cols[n].write(f'Error of component {n+1}')
+            plot_cols[n].write(f'Сomponent\'s №{n+1} residual')
+            
             df = pd.DataFrame(
                 np.abs(Y_values[:, n] - F_values[:, n]).T,
-                columns=[f'E{n+1}']
+                columns=[f'Error{n+1}']
             )
             plot_cols[n].line_chart(df)
-
+        st.write("-- - ")
+        #Show polynoms
         matrices = solver.show_streamlit()[:-2]
 #         if normed_plots:
 #             st.subheader(matrices[1][0])
@@ -99,12 +124,22 @@ if addon.button('RUN', key='run'):
         st.subheader(matrices[0][0])
         st.dataframe(matrices[0][1])
 
-        st.write(solution.process_final())
+        st.write(solution.get_results())
 
         matr_cols = st.columns(3)
+        st.write("-- - ")
         for ind, info in enumerate(matrices[2:5]):
             matr_cols[ind].subheader(info[0])
             matr_cols[ind].dataframe(info[1])
+        
+        #Downloading output button
+        with open(params['output_file'], 'rb') as fout:
+            main.download_button(
+                label='Download',
+                data=fout,
+                file_name=params['output_file']
+#                 mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
     except:
-        st.write("Something went wrong, check inputs")
-            
+        #except-block, if something goes wrong
+        st.write("Something went wrong... Check input and try again")

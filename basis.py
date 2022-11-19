@@ -1,5 +1,7 @@
+#Python imports
 from numpy.polynomial import Polynomial as pm
 
+#Defining basis choosing function (from mode choosen)
 def basis(degree, mode):
     if mode == "chebyshev":
         basis = [pm([-1, 2]), pm([1])]
@@ -24,6 +26,7 @@ def basis(degree, mode):
         del basis[0]
                              
     else:
+        #Exception if type is not matching
         raise Exception("Chosen mode is invalid. Choose one of following: chebyshev, legendre, laguerre, hermite. ")
     
     return basis
