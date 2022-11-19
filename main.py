@@ -55,12 +55,14 @@ if main.button('Run', key='run'):
         #try-block
         #Parsing file recieved
         input_file_text = input_name.getvalue().decode()
-        input_file = input_file_text.replace(',', '\t')
+        input_file = input_file_text.replace(",",".").replace(';', '\t')
+        st.write(input_file[0])
+        
         
         #Storing parameters in convinient way
         params = {
             'dimensions': [dim_1, dim_2, dim_3, dim],
-            'input_file': input_file_text,
+            'input_file': input_file,
             'output_file': output_name + '.csv',
             'degrees': [degree_1, degree_2, degree_3],
             'weights': init_weight,
