@@ -51,12 +51,11 @@ class _Polynom(object):
 class Builder(object):
     ###Constructor
     def __init__(self, solution):   
-        assert isinstance(solution, Solve)
         
         self._solution = solution
         degree = max(solution.degree) - 1
         
-        self.basis = basis(degree, self._solution.polynomial_type)# solution.polynomial_type)  
+        self.basis = basis(degree, self._solution.polynomial_type) 
         
         self.a = solution.a.T.tolist()
         self.c = solution.c.T.tolist()

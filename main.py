@@ -72,7 +72,7 @@ if main.button('Run', key='run'):
         #Processing of data using packages created previously
         with st.spinner('...'):
             solver =  Solve(params)
-            #solution = Builder(solver)
+            solution = Builder(solver)
             degrees = params['degrees']
         
         st.write("-")
