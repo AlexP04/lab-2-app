@@ -5,7 +5,7 @@ import numpy as np
 
 #Other packages
 from tool import *
-from poly import Build
+from poly import Builder
 
 #Setting tab icons and name
 st.set_page_config(page_title='Solver - 2', 
