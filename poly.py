@@ -44,11 +44,11 @@ class _Polynom(object):
         return ''.join(result)
     
 
-class PolynomialBuilder(object):
+class Builder(object):
     def __init__(self, solution):
         assert isinstance(solution, Solve)
         self._solution = solution
-        max_degree = max(solution.p) - 1
+        max_degree = max(solution.degree) - 1
         self.basis = b_gen.basis(degree, solution.polynomial_type) 
         if solution.poly_type == 'Chebyshev':
             self.symbol = 'T'
@@ -76,8 +76,8 @@ class PolynomialBuilder(object):
             shift = 0
             for j in range(3):  # `j` is an index to choose vector from X
                 psi_i_j = list()
-                for k in range(self._solution.deg[j]):  # `k` is an index for vector component
-                    psi_i_j_k = self._solution.Lamb[shift:shift + self._solution.p[j], i].ravel()
+                for k in range(self._solution.dim[j]):  # `k` is an index for vector component
+                    psi_i_j_k = self._solution.L[shift:shift + self._solution.p[j], i].ravel()
                     shift += self._solution.p[j]
                     psi_i_j.append(psi_i_j_k)
                 psi_i.append(psi_i_j)
@@ -125,7 +125,7 @@ class PolynomialBuilder(object):
         """
         strings = list()
         for k in range(len(self.psi[i][j])):
-            shift = sum(self._solution.deg[:j]) + k
+            shift = sum(self._solution.dim[:j]) + k
             for n in range(len(self.psi[i][j][k])):
                 strings.append(r'{0:.6f}\cdot {symbol}_{{{deg}}}(x_{{{1}{2}}})'.format(
                     self.a[i][shift] * self.psi[i][j][k][n],
@@ -143,7 +143,7 @@ class PolynomialBuilder(object):
         strings = list()
         for j in range(3):
             for k in range(len(self.psi[i][j])):
-                shift = sum(self._solution.deg[:j]) + k
+                shift = sum(self._solution.dim[:j]) + k
                 for n in range(len(self.psi[i][j][k])):
                     strings.append(r'{0:.6f}\cdot {symbol}_{{{deg}}}(x_{{{1}{2}}})'.format(
                         self.c[i][j] * self.a[i][shift] * self.psi[i][j][k][n],
@@ -161,7 +161,7 @@ class PolynomialBuilder(object):
         strings = list()
         for j in range(3):
             for k in range(len(self.psi[i][j])):
-                shift = sum(self._solution.deg[:j]) + k
+                shift = sum(self._solution.dim[:j]) + k
                 raw_coeffs = self._transform_to_standard(self.c[i][j] * self.a[i][shift] * self.psi[i][j][k])
                 diff = self.maxX[j][k] - self.minX[j][k]
                 mult_poly = np.poly1d([1 / diff, - self.minX[j][k]] / diff)
@@ -192,7 +192,7 @@ class PolynomialBuilder(object):
         strings = list()
         for j in range(3):
             for k in range(len(self.psi[i][j])):
-                shift = sum(self._solution.deg[:j]) + k
+                shift = sum(self._solution.dim[:j]) + k
                 current_poly = np.poly1d(self._transform_to_standard(self.c[i][j] * self.a[i][shift] *
                                                                      self.psi[i][j][k])[::-1],
                                          variable='(x_{0}{1})'.format(j+1, k+1))
@@ -240,9 +240,9 @@ class PolynomialBuilder(object):
                                 for i in range(self._solution.Y.shape[1])]
         
         return '\n'.join(
-            [r'$\Phi_i$ через $\Phi_{i1}(x_1)$, $\Phi_{i2}(x_2)$, $\Phi_{i3}(x_3)$:' + '\n'] + f_strings_from_f_ij +
-            [r'$\Phi_i$' + f'через поліноми {self._solution.poly_type}:' + '\n'] + f_strings + 
-            [r'$\Phi_i$ у звичайному вигляді (нормовані):' + '\n'] + f_strings_transformed + 
-            [r'$\Phi_i$ у звичайному вигляді (відновлені):' + '\n'] + f_strings_transformed_denormed + 
-            [r'Проміжні функції $\Phi$:' + '\n'] + phi_strings +
-            [r'Проміжні функції $\Psi$:' + '\n'] + psi_strings)
+            [r'$\Phi_i$ from $\Phi_{i1}(x_1)$, $\Phi_{i2}(x_2)$, $\Phi_{i3}(x_3)$:' + '\n'] + f_strings_from_f_ij +
+            [r'$\Phi_i$' + f'by polynoms {self._solution.poly_type}:' + '\n'] + f_strings + 
+            [r'$\Phi_i$ regular:' + '\n'] + f_strings_transformed + 
+            [r'$\Phi_i$ normed:' + '\n'] + f_strings_transformed_denormed + 
+            [r' $\Phi$:' + '\n'] + phi_strings +
+            [r' $\Psi$:' + '\n'] + psi_strings)
