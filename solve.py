@@ -53,7 +53,17 @@ class Solve(object):
     
     #Defining X_1,X_2... (defragmentating it for future use) :: public
     def norm_define(self):
-        self.data = np.array(np.linalg.norm(self.datas))
+        n,m = self.datas.shape
+        vec = np.ndarray(shape=(n,m),dtype=float)
+        
+        for j in range(m):
+            minv = np.min(self.datas[:,j])
+            maxv = np.max(self.datas[:,j])
+            for i in range(n):
+                vec[i,j] = (self.datas[i,j] - minv)/(maxv - minv)
+                
+        self.data = np.array(vec)
+
         
         X_1 = self.data[:, :self.degf[0]]
         X_2 = self.data[:, self.degf[0]:self.degf[1]]
@@ -71,7 +81,7 @@ class Solve(object):
     
     #Filling poly_function field based on polynom type :: public
     def poly_func(self):
-        if self.polynomial_type =='Chebyshev':
+        if self.polynomial_type =='Сhebyshev':
             self.poly_function = special.eval_sh_chebyt
         elif self.polynomial_type == 'Legendre':
             self.poly_function = special.eval_sh_legendre
@@ -79,9 +89,6 @@ class Solve(object):
             self.poly_function = special.eval_laguerre
         elif self.polynomial_type == 'Hermite':
             self.poly_function = special.eval_hermite
-            
-#     def __implement_average_for_b__():         
-#         return np.tile((self.Y.max(axis=1) + self.Y.min(axis=1))/2, (self.deg[3], 1)).T
     
     #Method of initializing beta using Y :: private
     def __implement_scale_for_b__():
@@ -89,19 +96,17 @@ class Solve(object):
     
     #Initializing b :: public
     def implement_b(self):
-#         if self.weights == 'Mean':
-#             self.b = self.__implement_average_for_b__()
         if self.weights =='Normalized':
             self.b = self.__implement_scale_for_b__()
         else:
             raise Exception("B is not defined")
     
-    #Three methods dedicated for initialization of A - first level coefs :: private
-    def __get_m_for_A__():
-            m = 0
-            for i in range(len(self.X)):
-                m += self.X[i].shape[1]*(self.degree[i]+1)
-            return m
+    #Two methods dedicated for initialization of A - first level coefs :: private
+#     def __get_m_for_A__():
+#             m = 0
+#             for i in range(len(self.X)):
+#                 m += self.X[i].shape[1]*(self.degree[i]+1)
+#             return m
 
     def __get_coord_for_A__(x,deg):
         n = self.data.shape[0]
@@ -145,13 +150,13 @@ class Solve(object):
         self.L = np.array(l)
     
     #Getting first level functions as linear combination of x and lambdas :: public 
-    def __get_first_level_function__(self):
+    def __get_first_level_function__(self, Lambda):
         lvl1 = np.ndarray(shape=(self.n, self.mX), dtype = float)
         i_1, i_2 = 0 
         for k in range(len(self.X)): 
             for s in range(self.X[k].shape[1]):
                 for i in range(self.X[k].shape[0]):
-                    lvl1[i,i_1] = self.A[i,i_2:i_2+self.degree[k]] @ L[i_2:i_2+self.degree[k]]
+                    lvl1[i,i_1] = self.A[i,i_2:i_2+self.degree[k]] @ Lambda[i_2:i_2+self.degree[k]]
                 i_2 += self.degree[k]
                 i_1 += 1
         return np.array(lvl1)
@@ -160,7 +165,7 @@ class Solve(object):
     def process_lvl1(self):
         self.lvl1 = [] 
         for i in range(self.dim[3]):
-            self.lvl1.append(self.__get_first_level_function__((self.L[:,i])))
+            self.lvl1.append(self.__get_first_level_function__(self.L[:,i]))
     
     #Defining next level coeficients :: public
     def ays(self):
