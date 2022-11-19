@@ -35,7 +35,9 @@ class Solve(object):
         self.degf = [sum(self.dim[:i + 1]) for i in range(len(self.dim))]
     
     #Minimizing equation using gradient descending method, fastest decline :: private
-    def __minimize_equation__(self, A, b):
+    def __minimize_equation__(self, A_input, b_input):
+        A = A_input.T @ A_input
+        b = A_input.T @ b_input
         if np.abs(np.linalg.det(A)) < self.accuracy:
             return cg(A, b, tol=self.accuracy)[0].reshape(-1,1)
 
@@ -134,12 +136,13 @@ class Solve(object):
         self.A = np.array(A)
     
     #Finding lambdas if user want (if not - then simple take from A) :: public
-    def lambdas(self):
+    def lambdas_fill(self):
         l = np.ndarray(shape = (self.A.shape[1],0), dtype = float)
         for i in range(self.dim[3]):
             if self.lambdas:
                 b_1 = self.degree[0] * self.dim[0]
                 b_2 = self.degree[1] * self.dim[1] + b_1
+                print(self.A[:,:b_1].shape)
                 l_1 = self.__minimize_equation__(self.A[:, :b_1], self.b[:, i])
                 l_2 = self.__minimize_equation__(self.A[:, b_1:b_2], self.b[:, i])
                 l_3 = self.__minimize_equation__(self.A[:, b_2:], self.b[:, i])
@@ -152,7 +155,7 @@ class Solve(object):
     #Getting first level functions as linear combination of x and lambdas :: public 
     def __get_first_level_function__(self, Lambda):
         lvl1 = np.ndarray(shape=(self.n, self.mX), dtype = float)
-        i_1, i_2 = 0 
+        i_1, i_2 = 0, 0 
         for k in range(len(self.X)): 
             for s in range(self.X[k].shape[1]):
                 for i in range(self.X[k].shape[0]):
@@ -171,7 +174,7 @@ class Solve(object):
     def ays(self):
         self.a = np.ndarray(shape=(self.mX,0), dtype=float)
                              
-        for i in range(self.deg[3]):
+        for i in range(self.dim[3]):
             a_1 = self.__minimize_equation__(self.lvl1[i][:, :self.degf[0]], self.Y[:, i])
             a_2 = self.__minimize_equation__(self.lvl1[i][:, self.degf[0]:self.degf[1]], self.Y[:, i])
             a_3 = self.__minimize_equation__(self.lvl1[i][:, self.degf[1]:], self.Y[:, i])
@@ -182,7 +185,7 @@ class Solve(object):
         N, k = len(self.X), 0
         lvl2 = np.ndarray(shape = (self.n,N),dtype = float)
 
-        for j in range(m): 
+        for j in range(N): 
             for i in range(self.n): 
                 lvl2[i,j] = lvl1[i,k:self.degf[j]] @ coef[k:self.degf[j]]
             k = self.degf[j]
@@ -192,16 +195,17 @@ class Solve(object):
     #Same as for lvl1 - just next level :: public
     def process_lvl2(self):
         self.lvl2 = []
-        for i in range(self.deg[3]):
+        for i in range(self.dim[3]):
             self.lvl2.append(self.__get_second_level_function__(self.lvl1[i],self.a[:,i]))
+        self.lvl2 = np.array(self.lvl2)
 
     #Getting coeficients for last level :: public
     def get_coeficients(self):
         
         self.c = np.ndarray(shape = (len(self.X),0),dtype = float)
-        for i in range(self.deg[3]):
-            A = self.lvl2.T @ self.lvl2
-            b = self.lvl2.T @ self.Y[:,i]
+        for i in range(self.dim[3]):
+            A = self.lvl2[i].T @ self.lvl2[i]
+            b = self.lvl2[i].T @ self.Y[:,i]
             
             #Gradient descending
             if np.abs(np.linalg.det(A)) < self.accuracy:
@@ -228,13 +232,13 @@ class Solve(object):
                 final[i,j] = self.lvl2[j][i,:] @ self.c[:,j]
                 
         self.final = np.array(final)
-        self.norm_error = np.abs(self.Y - self.F).max(axis=0).tolist()
+        self.norm_error = np.abs(self.Y - self.final).max(axis=0).tolist()
         
         #Defining error and scaling
         minY = self.Y_.min(axis=0)
         maxY = self.Y_.max(axis=0)
-        self.F_ = np.multiply(self.final,maxY - minY) + minY
-        self.error = np.abs(self.Y_ - self.F_).max(axis=0).tolist()
+        self.final_d = np.multiply(self.final,maxY - minY) + minY
+        self.error = np.abs(self.Y_ - self.final_d).max(axis=0).tolist()
     
     #Saving result :: public
     def save_result(self):
@@ -324,7 +328,7 @@ class Solve(object):
         self.implement_A()
         
         #First level
-        self.lambdas()
+        self.lambdas_fill()
         self.process_lvl1()
         
         #Second level

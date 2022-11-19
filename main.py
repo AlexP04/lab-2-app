@@ -46,8 +46,8 @@ degree_2 = params.number_input('Degree for X2', value=11, step=1, key='degree_2'
 degree_3 = params.number_input('Degree for X3', value=7, step=1, key='degree_3')
 use_type = params.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
 init_weight = params.radio('Weights initialization: ', ['Normalized', "diff"])
-lambdas = params.checkbox('Enable search of lambdas from equations: ')
-#norme = addon.radio('Plot normalized gra: ', ['Mean', 'Normalized'])addon.checkbox('Графіки для нормованих значень')
+lambdas = params.checkbox('Enable search of lambdas from equations')
+normalized = addon.checkbox('Plot normalized plots ')
 
 #Defining functionality of run button
 if main.button('Run', key='run'):
@@ -85,15 +85,16 @@ if main.button('Run', key='run'):
         for ind, info in enumerate(solver.show_streamlit()[-2:]):
             error_cols[ind].subheader(info[0])
             error_cols[ind].dataframe(info[1])
-
-#         if normed_plots:
-#             Y_values = solution._solution.Y
-#             F_values = solution._solution.F
-#         else:
         
         #Saving results in variables
-        Y_values = solution._solution.Y_
-        F_values = solution._solution.F_
+        if normilize:
+            Y_values = solution._solution.Y
+            final_values = solution._solution.final
+        else:
+            #Saving results in variables
+            Y_values = solution._solution.Y_
+            final_values = solution._solution.final_d
+            
         st.write("--")
         cols = Y_values.shape[1]
         
@@ -106,7 +107,7 @@ if main.button('Run', key='run'):
         #Plotting residuals, components for each dimension of Y
         for n in range(plot_n_cols):
             df = pd.DataFrame(
-                np.array([Y_values[:, n], F_values[:, n]]).T,
+                np.array([Y_values[:, n], final_values[:, n]]).T,
                 columns=[f'Y{n+1}', f'F{n+1}']
             )
             plot_cols[n].write(f'Component №{n+1}')
@@ -114,7 +115,7 @@ if main.button('Run', key='run'):
             plot_cols[n].write(f'Сomponent\'s №{n+1} residual')
             
             df = pd.DataFrame(
-                np.abs(Y_values[:, n] - F_values[:, n]).T,
+                np.abs(Y_values[:, n] - final_values[:, n]).T,
                 columns=[f'Error{n+1}']
             )
             plot_cols[n].line_chart(df)
