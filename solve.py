@@ -251,7 +251,7 @@ class Solve(object):
         #Write X:
         ws.append(['X: '])
         for i in range(self.n):
-             ws.append(l+self.datas[i,:self.degf[3]].tolist())
+             ws.append(l+self.datas[i,:self.degf[2]].tolist())
         ws.append([])
         
         #Write normalized X:
@@ -276,19 +276,19 @@ class Solve(object):
         
         #Level 1:
         for j in range(len(self.lvl1)):
-             s = 'First level matrix Psi%i: ' %(j+1)
-             ws.append([s])
-             for i in range(self.n):
-                  ws.append(l+self.lvl1[j][i].tolist())
-             ws.append([])
+            s = 'First level matrix Psi%i: ' %(j+1)
+            ws.append([s])
+            for i in range(self.n):
+                ws.append(l+self.lvl1[j][i].tolist())
+            ws.append([])
         
         #Level 2
         for j in range(len(self.lvl2)):
-             s = 'Second level matrix %i: ' %(j+1)
-             ws.append([s])
-             for i in range(self.lvl2[j].shape[0]):
-                  ws.append(l+self.lvl2[j][i].tolist())
-             ws.append([])
+            s = 'Second level matrix %i: ' %(j+1)
+            ws.append([s])
+            for i in range(self.lvl2[j].shape[0]):
+                ws.append(l+self.lvl2[j][i].tolist())
+            ws.append([])
         
         #Other intermediate results used
         ws.append(['L: '])
