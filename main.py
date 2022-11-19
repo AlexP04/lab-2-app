@@ -23,8 +23,8 @@ st.markdown("""
 #Setting general title 
 st.title('Input')
 
-#Dividing page into two parts (main and parameters input) 
-main, params = st.columns(2)
+#Dividing page into three parts (main and parameters input + output) 
+main, params, res = st.columns(3)
 
 #Setting main input header
 main.header('Files')
@@ -47,7 +47,7 @@ degree_3 = params.number_input('Degree for X3', value=7, step=1, key='degree_3')
 use_type = params.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
 init_weight = params.radio('Weights initialization: ', ['Normalized', "diff"])
 lambdas = params.checkbox('Enable search of lambdas from equations')
-normalized = addon.checkbox('Plot normalized plots ')
+normalize = params.checkbox('Plot normalized plots ')
 
 #Defining functionality of run button
 if main.button('Run', key='run'):
@@ -73,7 +73,7 @@ if main.button('Run', key='run'):
         
         #Processing of data using packages created previously
         with st.spinner('...'):
-            solver, solution, degrees = get_solution(params, pbar_container=main, max_deg=15)
+            solver, solution, degrees = get_solution(params, pbar_container=res, max_deg=15)
         
         st.write("-")
 #         if degrees != params['degrees']:
@@ -87,7 +87,7 @@ if main.button('Run', key='run'):
             error_cols[ind].dataframe(info[1])
         
         #Saving results in variables
-        if normilize:
+        if normalize:
             Y_values = solution._solution.Y
             final_values = solution._solution.final
         else:
