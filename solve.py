@@ -90,14 +90,14 @@ class Solve(object):
         elif self.polynomial_type == 'Hermite':
             self.poly_function = special.eval_hermite
     
-    #Method of initializing beta using Y :: private
-    def __implement_scale_for_b__():
-        return copy.deepcopy(self.Y)
+#     #Method of initializing beta using Y :: private
+#     def __implement_scale_for_b__(self):
+#         return copy.deepcopy(self.Y)
     
     #Initializing b :: public
     def implement_b(self):
         if self.weights =='Normalized':
-            self.b = self.__implement_scale_for_b__()
+            self.b = deepcopy(self.Y)
         else:
             raise Exception("B is not defined")
     
@@ -108,14 +108,14 @@ class Solve(object):
 #                 m += self.X[i].shape[1]*(self.degree[i]+1)
 #             return m
 
-    def __get_coord_for_A__(x,deg):
+    def __get_coord_for_A__(self, x,deg):
         n = self.data.shape[0]
         c = np.ndarray(shape=(n,1), dtype = float)
         for i in range(n):
             c[i,0] = self.poly_function(deg, x[i])
         return c
 
-    def __res_for_A__(X, N):
+    def __res_for_A__(self,X, N):
         n_1, n_2 = X.shape
         a = np.ndarray(shape=(n_1,0),dtype = float)
         for j in range(n_2):
