@@ -67,4 +67,4 @@ def get_solution(params, pbar_container, max_deg=15):
     #Build solution
 #     solution = Builder(solver)
     
-    return solver, solution, final_params['degrees']
+    return solver, 0, final_params['degrees']
