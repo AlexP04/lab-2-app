@@ -55,7 +55,6 @@ if main.button('Run', key='run'):
         #try-block
         #Parsing file recieved
         input_file_text = input_name.getvalue().decode()
-        st.write(input_file_text[0])
         input_file = input_file_text.replace(',', '\t')
         
         #Storing parameters in convinient way
@@ -73,6 +72,8 @@ if main.button('Run', key='run'):
         #Processing of data using packages created previously
         with st.spinner('...'):
             solver, solution, degrees = get_solution(params, pbar_container=main, max_deg=15)
+        
+        st.write("-")
 #         if degrees != params['degrees']:
 #             col3.write(f'**Підібрані степені поліномів:**  \nX1 — {degrees[0]}  \nX2 — {degrees[1]}  \nX3 — {degrees[2]}')
         
