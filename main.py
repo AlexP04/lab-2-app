@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 #Other packages
-from solve import Solver
+from solve import Solve
 from poly import Builder
 
 #Setting tab icons and name
