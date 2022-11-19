@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 #Other packages
-from tools import *
+from tool import *
 
 #Setting tab icons and name
 st.set_page_config(page_title='Solver - 2', 
