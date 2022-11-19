@@ -4,8 +4,7 @@ import pandas as pd
 import numpy as np
 
 #Other packages
-from solve import Solve
-from poly import Builder
+from tool import *
 
 #Setting tab icons and name
 st.set_page_config(page_title='Solver - 2', 
@@ -71,9 +70,7 @@ if main.button('Run', key='run'):
         
         #Processing of data using packages created previously
         with st.spinner('...'):
-            solver =  Solve(params)
-            solution = Builder(solver)
-            degrees = params['degrees']
+            solver, solution, degrees = get_solution(params, pbar_container=col3, max_deg=20) 
         
         st.write("-")
 #         if degrees != params['degrees']:
