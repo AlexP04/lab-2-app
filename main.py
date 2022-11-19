@@ -54,8 +54,9 @@ if main.button('Run', key='run'):
     try:
         #try-block
         #Parsing file recieved
-        input_file = input_name.getvalue().decode()
-        input_file = input_file_text.replace(',', '.').replace(' ', '\t')
+        input_file_text = input_name.getvalue().decode()
+        st.write(input_file_text[0])
+        input_file = input_file_text.replace(',', '\t')
         
         #Storing parameters in convinient way
         params = {
