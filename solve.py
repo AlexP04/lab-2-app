@@ -83,15 +83,15 @@ class Solve(object):
     
     #Filling poly_function field based on polynom type :: public
     def poly_func(self):
-        if self.polynomial_type =='Сhebyshev':
-            self.poly_function = special.eval_sh_chebyt
-        elif self.polynomial_type == 'Legendre':
+        if self.polynomial_type == 'Legendre':
             self.poly_function = special.eval_sh_legendre
         elif self.polynomial_type == 'Laguerre':
             self.poly_function = special.eval_laguerre
         elif self.polynomial_type == 'Hermite':
             self.poly_function = special.eval_hermite
-    
+        else:
+            self.poly_function = special.eval_sh_chebyt
+        
 #     #Method of initializing beta using Y :: private
 #     def __implement_scale_for_b__(self):
 #         return copy.deepcopy(self.Y)
@@ -142,7 +142,6 @@ class Solve(object):
             if self.lambdas:
                 b_1 = self.degree[0] * self.dim[0]
                 b_2 = self.degree[1] * self.dim[1] + b_1
-                print(self.A[:,:b_1].shape)
                 l_1 = self.__minimize_equation__(self.A[:, :b_1], self.b[:, i])
                 l_2 = self.__minimize_equation__(self.A[:, b_1:b_2], self.b[:, i])
                 l_3 = self.__minimize_equation__(self.A[:, b_2:], self.b[:, i])
