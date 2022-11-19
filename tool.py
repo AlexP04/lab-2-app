@@ -13,8 +13,9 @@ def get_err(params):
     #Using Solve class defined - get full info about errors
     params_new = params[-1].copy()
     params_new['degrees'] = [*(params[:-1])]
+    raise Exception("FF: "+str(params_new['degrees']))
     solver = Solve(params_new)
-#     func_runtimes = solver.prepare()
+
     normed_error = min(solver.norm_error)
     return (params_new['degrees'], normed_error, 0 )
 
