@@ -49,7 +49,7 @@ def get_solution(params, pbar_container, max_deg=15):
 
         results.sort(key=lambda t: t[1])
     else:
-        results = [getError(ranges[0])]
+        results = [get_err(ranges[0])]
     # func_runtimes = {key: [] for key in results[-1][-1].keys()}
     # for key in func_runtimes:
     #     for res in results:
