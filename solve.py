@@ -24,7 +24,6 @@ class Solve(object):
         self.name_input = user_input['input_file']
         self.name_output = user_input['output_file']
         self.degree = list(map(lambda x:x+1,user_input['degrees']))
-        self.weights = user_input['weights']
         self.polynomial_type = user_input['polynomial_type']
         self.lambdas = user_input['lambda']
     
@@ -98,11 +97,8 @@ class Solve(object):
     
     #Initializing b :: public
     def implement_b(self):
-        if self.weights =='Normalized':
-            self.b = deepcopy(self.Y)
-        else:
-            raise Exception("B is not defined")
-    
+        self.b = deepcopy(self.Y)
+       
     #Two methods dedicated for initialization of A - first level coefs :: private
 #     def __get_m_for_A__():
 #             m = 0

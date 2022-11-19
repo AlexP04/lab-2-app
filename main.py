@@ -4,7 +4,8 @@ import pandas as pd
 import numpy as np
 
 #Other packages
-from tool import *
+from solve import Solver
+from poly import Builder
 
 #Setting tab icons and name
 st.set_page_config(page_title='Solver - 2', 
@@ -45,7 +46,7 @@ degree_1 = params.number_input('Degree for X1', value=13, step=1, key='degree_1'
 degree_2 = params.number_input('Degree for X2', value=11, step=1, key='degree_2')
 degree_3 = params.number_input('Degree for X3', value=7, step=1, key='degree_3')
 use_type = params.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
-init_weight = params.radio('Weights initialization: ', ['Normalized', "diff"])
+# init_weight = params.radio('Weights initialization: ', ['Normalized', "diff"])
 lambdas = params.checkbox('Enable search of lambdas from equations')
 normalize = params.checkbox('Plot normalized plots ')
 
@@ -64,7 +65,6 @@ if main.button('Run', key='run'):
             'input_file': input_file,
             'output_file': output_name + '.csv',
             'degrees': [degree_1, degree_2, degree_3],
-            'weights': init_weight,
             'polynomial_type': use_type,
             'lambda': lambdas
         }
@@ -72,7 +72,9 @@ if main.button('Run', key='run'):
         
         #Processing of data using packages created previously
         with st.spinner('...'):
-            solver, solution, degrees = get_solution(params, pbar_container=res, max_deg=15)
+            solver =  Solve(params)
+            solution = Builder(solver)
+            degrees = params['degrees']
         
         st.write("-")
 #         if degrees != params['degrees']:
