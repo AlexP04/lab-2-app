@@ -6,7 +6,6 @@ from tabulate import tabulate as tb
 from scipy import special
 from openpyxl import Workbook
 from scipy.sparse.linalg import cg
-from sklearn.preprocessing import normalize
 
 from basis import *
 
@@ -46,7 +45,7 @@ class Solve(object):
         return x.reshape(-1, 1)
 
     def norm_define(self):
-        self.data = np.array(normalize(self.datas))
+        self.data = np.array(np.linalg.norm(self.datas))
         
         X_1 = self.data[:, :self.degf[0]]
         X_2 = self.data[:, self.degf[0]:self.degf[1]]
