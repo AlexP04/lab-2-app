@@ -75,7 +75,7 @@ if main.button('Run', key='run'):
             solver, degrees = get_solution(params, pbar_container=main, max_deg=20) 
         st.write("-")
         st.write(solver.norm_error)
-        solution = Build(solver) 
+        solution = Builder(solver) 
         st.write("-")
 #         if degrees != params['degrees']:
 #             col3.write(f'**Підібрані степені поліномів:**  \nX1 — {degrees[0]}  \nX2 — {degrees[1]}  \nX3 — {degrees[2]}')
