@@ -11,20 +11,18 @@ from polynom import _Polynom
 class Builder(object):
     ###Constructor
     def __init__(self, solution):   
-        try:
-            self._solution = solution
-            degree = max(solution.degree) - 1
+        
+        self._solution = solution
+        degree = max(solution.degree) - 1
 
-            self.basis = basis(degree, solution.polynomial_type) 
+        self.basis = basis(degree, solution.polynomial_type) 
 
-            self.a = solution.a.T.tolist()
-            self.c = solution.c.T.tolist()
-            self.minX = [X.min(axis=0).ravel() for X in solution.X_]
-            self.maxX = [X.max(axis=0).ravel() for X in solution.X_]
-            self.minY = solution.Y_.min(axis=0).ravel()
-            self.maxY = solution.Y_.max(axis=0).ravel()
-        except:
-            raise "Construction error"
+        self.a = solution.a.T.tolist()
+        self.c = solution.c.T.tolist()
+        self.minX = [X.min(axis=0).ravel() for X in solution.X_]
+        self.maxX = [X.max(axis=0).ravel() for X in solution.X_]
+        self.minY = solution.Y_.min(axis=0).ravel()
+        self.maxY = solution.Y_.max(axis=0).ravel()
     
     #Standartize coeficients for polynom :: private
     def __standardtize__(self, c):
