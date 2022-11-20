@@ -9,7 +9,7 @@ from tool import *
 from poly import Builder
 
 #Setting tab icons and name
-st.set_page_config(page_title='Solver program for lab2', 
+st.set_page_config(page_title='Solver - 2', 
                    layout='wide')
 
 #seting color theme 
@@ -31,7 +31,7 @@ main, dims, degs, add = st.columns(4)
 main.header('Files')
 
 #Declared variables for input/output files will be used
-input_name = main.file_uploader('Input file name', type=['csv', 'txt'], key='input_file')
+input_name = main.file_uploader('Input file name', type=['csv'], key='input_file')
 output_name = main.text_input('Output file name', value='output', key='output_file')
 
 #Setting header for dimension input 
