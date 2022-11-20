@@ -249,7 +249,7 @@ class Solve(object):
         
         result.append(('Normalized inputs: ',
             pd.DataFrame(self.data, 
-            columns = [f'X{i+1}{j+1}' for i in range(3) for j in range(self.deg[i])] + [f'Y{i+1}' for i in range(self.deg[-1])],
+            columns = [f'X{i+1}{j+1}' for i in range(3) for j in range(self.dim[i])] + [f'Y{i+1}' for i in range(self.dim[-1])],
             index = np.arange(1, self.n+1))
         ))
         
