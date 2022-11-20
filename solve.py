@@ -280,12 +280,12 @@ class Solve(object):
         #Show errors
         df = pd.DataFrame(self.norm_error).T
         df.columns = np.arange(1, len(self.norm_error)+1)
-        result.append((r'normalized errors',
+        result.append((r'Normalized errors',
             df
         ))
         df = pd.DataFrame(self.error).T
         df.columns = np.arange(1, len(self.error)+1)
-        result.append((r'errors',
+        result.append((r'Errors',
             df
         ))
         
