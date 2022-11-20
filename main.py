@@ -9,8 +9,7 @@ from tool import *
 from poly import Builder
 
 #Setting tab icons and name
-st.set_page_config(page_title='Solver - 2', 
-                   page_icon='T',
+st.set_page_config(page_title='Solver program for lab2', 
                    layout='wide')
 
 #seting color theme 
@@ -26,7 +25,7 @@ st.markdown("""
 st.title('Solver')
 
 #Dividing page into three parts (main and parameters input + output) 
-main, params, add = st.columns(3)
+main, dims, degs, add = st.columns(4)
 
 #Setting main input header
 main.header('Files')
@@ -35,19 +34,27 @@ main.header('Files')
 input_name = main.file_uploader('Input file name', type=['csv', 'txt'], key='input_file')
 output_name = main.text_input('Output file name', value='output', key='output_file')
 
-#Setting header for parameters input 
-params.header('Input parameters')
+#Setting header for dimension input 
+dims.header('Input dimensionality')
 
-#Declaring variables for dimensionality of data, degrees of polynoms and their types and other options
-dim = params.number_input('Dimension of Y', value=4, step=1, key='dim')
-dim_1 = params.number_input('Dimension of X1', value=2, step=1, key='dim_1')
-dim_2 = params.number_input('Dimension of X2', value=2, step=1, key='dim_2')
-dim_3 = params.number_input('Dimension of X3', value=3, step=1, key='dim_3')
-degree_1 = params.number_input('Degree for X1', value=13, step=1, key='degree_1')
-degree_2 = params.number_input('Degree for X2', value=11, step=1, key='degree_2')
-degree_3 = params.number_input('Degree for X3', value=7, step=1, key='degree_3')
+#Declaring variables for dimensionality of data
+dim = dims.number_input('Dimension of Y', value=4, step=1, key='dim')
+dim_1 = dims.number_input('Dimension of X1', value=2, step=1, key='dim_1')
+dim_2 = dims.number_input('Dimension of X2', value=2, step=1, key='dim_2')
+dim_3 = dims.number_input('Dimension of X3', value=3, step=1, key='dim_3')
+
+#Same for degrees
+degs.header('Input polynoms degrees ')
+
+#Declaring variables
+degree_1 = degs.number_input('Degree for X1', value=13, step=1, key='degree_1')
+degree_2 = degs.number_input('Degree for X2', value=11, step=1, key='degree_2')
+degree_3 = degs.number_input('Degree for X3', value=7, step=1, key='degree_3')
+
+#Additional input section, some specifications
+add.header('Input other parameters ')
 use_type = add.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
-lambdas =  add.checkbox('Enable search of lambdas from equations')
+lambdas =  add.checkbox('Enable search for $\|\lambda\|$')
 normalize = add.checkbox('Plot normalized plots ')
 
 #Defining functionality of run button
@@ -118,7 +125,7 @@ if main.button('Run', key='run'):
                 columns=[f'Error{n+1}']
             )
             plot_cols[n].line_chart(df)
-        st.write("-- - ")
+        
         #Show polynoms
         matrices = solver.show()[:-2]
                                  
@@ -132,7 +139,7 @@ if main.button('Run', key='run'):
         st.write(solution.get_results())
 
         matr_cols = st.columns(3)
-        st.write("-- - ")
+        
         for ind, info in enumerate(matrices[2:5]):
             matr_cols[ind].subheader(info[0])
             matr_cols[ind].dataframe(info[1])
