@@ -122,7 +122,7 @@ if main.button('Run', key='run'):
             plot_cols[n].line_chart(df)
         st.write("-- - ")
         #Show polynoms
-        matrices = solver.show_streamlit()[:-2]
+        matrices = solver.show()[:-2]
 #         if normed_plots:
 #             st.subheader(matrices[1][0])
 #             st.dataframe(matrices[1][1])

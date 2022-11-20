@@ -234,6 +234,63 @@ class Solve(object):
         maxY = self.Y_.max(axis=0)
         self.final_d = np.multiply(self.final,maxY - minY) + minY
         self.error = np.abs(self.Y_ - self.final_d).max(axis=0).tolist()
+
+    
+    #Show result as a output for web page :: public
+    def show(self):
+        result = []
+        
+        #Show inputs (normed and not)
+        result.append(('Inputs: ',
+            pd.DataFrame(self.datas, 
+            columns = [f'X{i+1}{j+1}' for i in range(3) for j in range(self.dim[i])] + [f'Y{i+1}' for i in range(self.dim[-1])],
+            index = np.arange(1, self.n+1))
+        ))
+        
+        result.append(('Normalized inputs: ',
+            pd.DataFrame(self.data, 
+            columns = [f'X{i+1}{j+1}' for i in range(3) for j in range(self.deg[i])] + [f'Y{i+1}' for i in range(self.deg[-1])],
+            index = np.arange(1, self.n+1))
+        ))
+        
+        #Show matrixes
+        result.append((r'$\|\lambda\|$',
+            pd.DataFrame(self.L)
+        ))
+        
+        result.append((r'$\|a\|$',
+            pd.DataFrame(self.a)
+        ))
+        
+        result.append((r'$\|c\|$',
+            pd.DataFrame(self.c)
+        ))
+        
+        #Level-1 -2 
+        for j in range(len(self.lvl1)):
+            result.append((r' $\|\Psi_{}\|$'.format(j+1),
+            pd.DataFrame(self.lvl1[j])
+        ))
+            
+        for j in range(len(self.lvl2)):
+            result.append((r' $\|\Phi_{}\|$'.format(j+1),
+            pd.DataFrame(self.lvl2[j])
+        ))
+        
+        #Show errors
+        df = pd.DataFrame(self.norm_error).T
+        df.columns = np.arange(1, len(self.norm_error)+1)
+        result.append((r'normalized errors',
+            df
+        ))
+        df = pd.DataFrame(self.error).T
+        df.columns = np.arange(1, len(self.error)+1)
+        result.append((r'errors',
+            df
+        ))
+        
+        return result
+    
     
     #Saving result :: public
     def save_result(self):
