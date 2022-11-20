@@ -158,12 +158,12 @@ class Builder(object):
                                             for i in range(self._solution.Y.shape[1])]
         f_texts_l = [r'$\Phi_{i}(x_1, x_2, x_3) = {result}$'.format(i=i+1, result=self.__print_final_2__(i)) + '\n' 
                                 for i in range(self._solution.Y.shape[1])]
-        
-        return '\n'.join(
-            [r'$\Phi_{i1}(x_1)$, $\Phi_{i2}(x_2)$, $\Phi_{i3}(x_3)$:' + '\n'] + f_texts_l +
-            [r'$\Phi_i$' + f'from polinom {self._solution.polynomial_type}:' + '\n'] + f_texts + 
-            [r'$\Phi_i$ not normalized:' + '\n'] + f_texts_td+
-            [r'$\Phi_i$ normalized:' + '\n'] + f_texts_t
-        )
+        return " "
+#         return '\n'.join(
+#             [r'$\Phi_{i1}(x_1)$, $\Phi_{i2}(x_2)$, $\Phi_{i3}(x_3)$:' + '\n'] + f_texts_l +
+#             [r'$\Phi_i$' + f'from polinom {self._solution.polynomial_type}:' + '\n'] + f_texts + 
+#             [r'$\Phi_i$ not normalized:' + '\n'] + f_texts_td+
+#             [r'$\Phi_i$ normalized:' + '\n'] + f_texts_t
+#         )
 #             [r'Проміжні функції $\Phi$:' + '\n'] + phi_strings +
 #             [r'Проміжні функції $\Psi$:' + '\n'] + psi_strings)
