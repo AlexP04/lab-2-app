@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import sys
 
 #Other packages
 from tool import *
@@ -147,4 +148,4 @@ if main.button('Run', key='run'):
             )
     except Exception as ex:
         #except-block, if something goes wrong
-        st.write(" Exception :" + str(type(ex).__name__) + "Check input and try again")
+        st.write(" Exception :" + str(type(ex).__name__) ", info: "+ str(sys.exc_info()) + ":: Check input and try again")
