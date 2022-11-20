@@ -106,7 +106,7 @@ if main.button('Run', key='run'):
         plot_cols = st.columns(cols)
         
         #Plotting residuals, components for each dimension of Y
-        for n in range(plot_cols):
+        for n in range(cols):
             df = pd.DataFrame(
                 np.array([Y_values[:, n], final_values[:, n]]).T,
                 columns=[f'Y{n+1}', f'F{n+1}']
