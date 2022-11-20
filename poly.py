@@ -11,18 +11,20 @@ from polynom import _Polynom
 class Builder(object):
     ###Constructor
     def __init__(self, solution):   
-        
-        self._solution = solution
-        degree = max(solution.degree) - 1
-        
-        self.basis = basis(degree, solution.polynomial_type) 
-        
-        self.a = solution.a.T.tolist()
-        self.c = solution.c.T.tolist()
-        self.minX = [X.min(axis=0).ravel() for X in solution.X_]
-        self.maxX = [X.max(axis=0).ravel() for X in solution.X_]
-        self.minY = solution.Y_.min(axis=0).ravel()
-        self.maxY = solution.Y_.max(axis=0).ravel()
+        try:
+            self._solution = solution
+            degree = max(solution.degree) - 1
+
+            self.basis = basis(degree, solution.polynomial_type) 
+
+            self.a = solution.a.T.tolist()
+            self.c = solution.c.T.tolist()
+            self.minX = [X.min(axis=0).ravel() for X in solution.X_]
+            self.maxX = [X.max(axis=0).ravel() for X in solution.X_]
+            self.minY = solution.Y_.min(axis=0).ravel()
+            self.maxY = solution.Y_.max(axis=0).ravel()
+        except:
+            raise "Construction error"
     
     #Standartize coeficients for polynom :: private
     def __standardtize__(self, c):
@@ -158,12 +160,12 @@ class Builder(object):
                                             for i in range(self._solution.Y.shape[1])]
         f_texts_l = [r'$\Phi_{i}(x_1, x_2, x_3) = {result}$'.format(i=i+1, result=self.__print_final_2__(i)) + '\n' 
                                 for i in range(self._solution.Y.shape[1])]
-        return " "
-#         return '\n'.join(
-#             [r'$\Phi_{i1}(x_1)$, $\Phi_{i2}(x_2)$, $\Phi_{i3}(x_3)$:' + '\n'] + f_texts_l +
-#             [r'$\Phi_i$' + f'from polinom {self._solution.polynomial_type}:' + '\n'] + f_texts + 
-#             [r'$\Phi_i$ not normalized:' + '\n'] + f_texts_td+
-#             [r'$\Phi_i$ normalized:' + '\n'] + f_texts_t
-#         )
+        
+        return '\n'.join(
+            [r'$\Phi_{i1}(x_1)$, $\Phi_{i2}(x_2)$, $\Phi_{i3}(x_3)$:' + '\n'] + f_texts_l +
+            [r'$\Phi_i$' + f'from polinom {self._solution.polynomial_type}:' + '\n'] + f_texts + 
+            [r'$\Phi_i$ not normalized:' + '\n'] + f_texts_td+
+            [r'$\Phi_i$ normalized:' + '\n'] + f_texts_t
+        )
 #             [r'Проміжні функції $\Phi$:' + '\n'] + phi_strings +
 #             [r'Проміжні функції $\Psi$:' + '\n'] + psi_strings)

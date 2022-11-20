@@ -145,6 +145,8 @@ if main.button('Run', key='run'):
                 file_name=params['output_file']
 #                 mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             )
+    except "Construction error":
+        st.write("Constructor errored... Check input and try again")
     except:
         #except-block, if something goes wrong
         st.write("Something went wrong... Check input and try again")
