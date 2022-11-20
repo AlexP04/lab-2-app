@@ -23,10 +23,10 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 #Setting general title 
-st.title('Input')
+st.title('Solver')
 
 #Dividing page into three parts (main and parameters input + output) 
-main, params, res = st.columns(3)
+main, params, add = st.columns(3)
 
 #Setting main input header
 main.header('Files')
@@ -46,10 +46,9 @@ dim_3 = params.number_input('Dimension of X3', value=3, step=1, key='dim_3')
 degree_1 = params.number_input('Degree for X1', value=13, step=1, key='degree_1')
 degree_2 = params.number_input('Degree for X2', value=11, step=1, key='degree_2')
 degree_3 = params.number_input('Degree for X3', value=7, step=1, key='degree_3')
-use_type = params.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
-# init_weight = params.radio('Weights initialization: ', ['Normalized', "diff"])
-lambdas = params.checkbox('Enable search of lambdas from equations')
-normalize = params.checkbox('Plot normalized plots ')
+use_type = add.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
+lambdas =  add.checkbox('Enable search of lambdas from equations')
+normalize = add.checkbox('Plot normalized plots ')
 
 #Defining functionality of run button
 if main.button('Run', key='run'):
@@ -68,15 +67,14 @@ if main.button('Run', key='run'):
             'polynomial_type': use_type,
             'lambda': lambdas
         }
-        st.write("-")
+      
         
         #Processing of data using packages created previously
         with st.spinner('...'):
             solver, degrees = get_solution(params, pbar_container=main, max_deg=20) 
-        st.write("-")
-        st.write(solver.norm_error)
+      
         solution = Builder(solver) 
-        st.write("-")
+
 #         if degrees != params['degrees']:
 #             col3.write(f'**Підібрані степені поліномів:**  \nX1 — {degrees[0]}  \nX2 — {degrees[1]}  \nX3 — {degrees[2]}')
         
@@ -96,7 +94,7 @@ if main.button('Run', key='run'):
             Y_values = solution._solution.Y_
             final_values = solution._solution.final_d
             
-        st.write("--")
+       
         cols = Y_values.shape[1]
         
         #Results section
@@ -123,12 +121,13 @@ if main.button('Run', key='run'):
         st.write("-- - ")
         #Show polynoms
         matrices = solver.show()[:-2]
-#         if normed_plots:
-#             st.subheader(matrices[1][0])
-#             st.dataframe(matrices[1][1])
-#         else:
-        st.subheader(matrices[0][0])
-        st.dataframe(matrices[0][1])
+                                 
+        if normalize:
+            st.subheader(matrices[1][0])
+            st.dataframe(matrices[1][1])
+        else:
+            st.subheader(matrices[0][0])
+            st.dataframe(matrices[0][1])
 
         st.write(solution.get_results())
 
@@ -141,11 +140,11 @@ if main.button('Run', key='run'):
         #Downloading output button
         with open(params['output_file'], 'rb') as fout:
             main.download_button(
-                label='Download',
+                label='Download output file',
                 data=fout,
                 file_name=params['output_file']
-#                 mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             )
+            
     except Exception as ex:
         #except-block, if something goes wrong
         st.write("Exception :"+ str(sys.exc_info()) + ":: Check input and try again")

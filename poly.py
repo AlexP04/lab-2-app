@@ -146,7 +146,7 @@ class Builder(object):
                 texts.append(str(_Polynom(
                     current_poly, 
                     symbol='(x_{0}{1})'.format(j+1, k+1),
-                    subscribe='{0}{1}'.format(j+1, k+1))))
+                    subscribe='{0}{1}'.format(j+1, k+1)).__print__()))
                 
         res = ' + '.join(texts).replace('+ -', '- ')
         return res
@@ -163,7 +163,7 @@ class Builder(object):
                 texts.append(str(_Polynom(
                     current_polynom, 
                     symbol="(x_"+str(j+1)+str(k+1)+")".format(j+1, k+1),
-                    subscribe='{0}{1}'.format(j+1, k+1))))
+                    subscribe='{0}{1}'.format(j+1, k+1)).__print__()) )
         res = ' + '.join(texts).replace('+ -', '- ')
         return res
     
