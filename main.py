@@ -83,7 +83,7 @@ if main.button('Run', key='run'):
         #Showing and plotting errors
         error_cols = st.columns(2)
     
-        for ind, info in enumerate(solver.show_streamlit()[-2:]):
+        for ind, info in enumerate(solver.show()[-2:]):
             error_cols[ind].subheader(info[0])
             error_cols[ind].dataframe(info[1])
         
