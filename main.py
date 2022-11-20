@@ -148,4 +148,4 @@ if main.button('Run', key='run'):
             )
     except Exception as ex:
         #except-block, if something goes wrong
-        st.write(" Exception :" + str(type(ex).__name__) ", info: "+ str(sys.exc_info()) + ":: Check input and try again")
+        st.write("Exception :"+ str(sys.exc_info()) + ":: Check input and try again")
