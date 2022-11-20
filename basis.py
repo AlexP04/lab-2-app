@@ -7,7 +7,7 @@ def basis(degree, mode):
     
     if mode == 'test':
         #Free block
-        raise Exception("Ignore")
+        raise "Ignore"
         
     elif mode == 'chebyshev':
         basis = [pm([-1, 2]), pm([1])]
@@ -33,6 +33,6 @@ def basis(degree, mode):
                              
     else:
         #Exception if type is not matching
-        raise Exception("Chosen mode is invalid. Choose one of following: chebyshev, legendre, laguerre, hermite. ")
+        raise ValueError("Mode "+str(mode)+" is not allowed")
     
     return basis

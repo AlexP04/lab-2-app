@@ -145,8 +145,6 @@ if main.button('Run', key='run'):
                 file_name=params['output_file']
 #                 mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             )
-    except "Chosen mode is invalid":
-        st.write("Chosen mode is invalid... Check input and try again")
-    except:
+    except Exception as ex:
         #except-block, if something goes wrong
-        st.write("Something went wrong... Check input and try again")
+        st.write(" Exception :" + str(type(ex).__name__) + "Check input and try again")
