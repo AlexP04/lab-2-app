@@ -16,7 +16,7 @@ st.set_page_config(page_title='Solver - 2',
 st.markdown("""
     <style>
     .stProgress .st-ey {
-        background-color: pink;
+        background-color: rgba(242, 242, 242, 1);
     }
     </style>
     """, unsafe_allow_html=True)
