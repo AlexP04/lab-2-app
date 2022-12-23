@@ -99,13 +99,6 @@ class Solve(object):
     def implement_b(self):
         self.b = deepcopy(self.Y)
        
-    #Two methods dedicated for initialization of A - first level coefs :: private
-#     def __get_m_for_A__():
-#             m = 0
-#             for i in range(len(self.X)):
-#                 m += self.X[i].shape[1]*(self.degree[i]+1)
-#             return m
-
     def __get_coord_for_A__(self, x,deg):
         n = self.data.shape[0]
         c = np.ndarray(shape=(n,1), dtype = float)
@@ -135,16 +128,7 @@ class Solve(object):
     def lambdas_fill(self):
         l = np.ndarray(shape = (self.A.shape[1],0), dtype = float)
         for i in range(self.dim[3]):
-            if self.lambdas:
-                b_1 = self.degree[0] * self.dim[0]
-                b_2 = self.degree[1] * self.dim[1] + b_1
-                l_1 = self.__minimize_equation__(self.A[:, :b_1], self.b[:, i])
-                l_2 = self.__minimize_equation__(self.A[:, b_1:b_2], self.b[:, i])
-                l_3 = self.__minimize_equation__(self.A[:, b_2:], self.b[:, i])
-                l = np.append(l, np.concatenate((l_1, l_2, l_3)), axis=1)
-            else:
-                l = np.append(l, self.__minimize_equation__(self.A, self.b[:, i]), axis=1)
-        
+            l = np.append(l, self.__minimize_equation__(self.A, self.b[:, i]), axis=1)
         self.L = np.array(l)
     
     #Getting first level functions as linear combination of x and lambdas :: public 

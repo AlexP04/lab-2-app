@@ -54,7 +54,6 @@ degree_3 = degs.number_input('Degree for X3', value=7, step=1, key='degree_3')
 #Additional input section, some specifications
 add.header('Input other parameters ')
 use_type = add.radio('Polynomial type used: ', ['Chebyshev', 'Legendre', 'Laguerre', 'Hermite'])
-lambdas =  add.checkbox('Enable search for lambdas')
 normalize = add.checkbox('Plot normalized plots ')
 
 #Defining functionality of run button
@@ -122,7 +121,6 @@ if main.button('Run', key='run'):
             'output_file': output_name + '.csv',
             'degrees': [degree_1, degree_2, degree_3],
             'polynomial_type': use_type,
-            'lambda': lambdas
         }
       
         
