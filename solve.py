@@ -33,7 +33,7 @@ class Solve(object):
         self.n = len(self.datas)
         self.degf = [sum(self.dim[:i + 1]) for i in range(len(self.dim))]
     
-    #Minimizing equation using gradient descending method, fastest decline :: private
+    #Minimizing equation using conjugate gradients method (if A is not sparce matrix, then use regular one) :: private
     def __minimize_equation__(self, A_input, b_input):
         A = A_input.T @ A_input
         b = A_input.T @ b_input
