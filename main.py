@@ -78,12 +78,9 @@ if main.button('Run', key='run'):
         
         #Processing of data using packages created previously
         with st.spinner('...'):
-            solver, degrees = get_solution(params, pbar_container=main, max_deg=20) 
+            solver, degrees = get_solution(params, pbar_container=main, max_deg=8) 
       
         solution = Builder(solver) 
-
-#         if degrees != params['degrees']:
-#             col3.write(f'**Підібрані степені поліномів:**  \nX1 — {degrees[0]}  \nX2 — {degrees[1]}  \nX3 — {degrees[2]}')
         
         #Showing and plotting errors
         error_cols = st.columns(2)
