@@ -47,9 +47,9 @@ dim_3 = dims.number_input('Dimension of X3', value=3, step=1, key='dim_3')
 degs.header('Input polynoms degrees ')
 
 #Declaring variables
-degree_1 = degs.number_input('Degree for X1', value=13, step=1, key='degree_1')
-degree_2 = degs.number_input('Degree for X2', value=11, step=1, key='degree_2')
-degree_3 = degs.number_input('Degree for X3', value=7, step=1, key='degree_3')
+degree_1 = degs.number_input('Degree for X1', value=0, step=1, key='degree_1')
+degree_2 = degs.number_input('Degree for X2', value=0, step=1, key='degree_2')
+degree_3 = degs.number_input('Degree for X3', value=0, step=1, key='degree_3')
 
 #Additional input section, some specifications
 add.header('Input other parameters ')
