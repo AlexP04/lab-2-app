@@ -19,7 +19,7 @@ def get_err(params):
     return (params_new['degrees'], normed_error, 0 )
 
 #Function to get solution
-def get_solution(params, pbar_container, max_deg=15):
+def get_solution(params, pbar_container, max_deg=8):
     #Check user input and asign values
     if params['degrees'][0] == 0:
         x1_range = list(range(1, max_deg+1))
@@ -50,10 +50,7 @@ def get_solution(params, pbar_container, max_deg=15):
         results.sort(key=lambda t: t[1])
     else:
         results = [get_err(ranges[0])]
-    # func_runtimes = {key: [] for key in results[-1][-1].keys()}
-    # for key in func_runtimes:
-    #     for res in results:
-    #         func_runtimes[key] += res[-1][key]
+
     
     #Get solution and solver object
     final_params = params.copy()
