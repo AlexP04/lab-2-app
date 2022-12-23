@@ -25,7 +25,6 @@ class Solve(object):
         self.name_output = user_input['output_file']
         self.degree = list(map(lambda x:x+1,user_input['degrees']))
         self.polynomial_type = user_input['polynomial_type']
-        self.lambdas = user_input['lambda']
     
     #Pre-process step, reading data :: public
     def define_data(self):
