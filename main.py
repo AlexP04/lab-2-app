@@ -126,7 +126,7 @@ if main.button('Run', key='run'):
         
         #Processing of data using packages created previously
         with st.spinner('...'):
-            solver, degrees = get_solution(params, pbar_container=main, max_deg=8) 
+            solver, degrees = get_solution(params, pbar_container=main, max_deg=7) 
       
         solution = Builder(solver) 
         
